@@ -115,7 +115,7 @@ fn update_cell_type(board: &Board, coord: Coord, cell_type: CellType) -> Board {
 // ------------------------- TESTS -------------------------
 
 #[cfg(test)]
-mod test {
+mod board_test {
     use crate::board::*;
 
     #[test]
