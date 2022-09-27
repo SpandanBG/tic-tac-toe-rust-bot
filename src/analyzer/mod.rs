@@ -125,4 +125,34 @@ mod analyzer_tests {
 
         assert_eq!(best_move, Some(Coord { x: 2, y: 1 }));
     }
+
+    #[test]
+    fn given_position_4_winning_then_return_winning_coordinate() {
+        let game_analyzer = analyzer::new();
+        let game_board = board::new();
+
+        let best_move = game_analyzer.get_best_move(
+            game_board
+                .place_player(Coord { x: 0, y: 1 })
+                .place_player(Coord { x: 2, y: 1 }),
+            CellType::PLAYER_1,
+        );
+
+        assert_eq!(best_move, Some(Coord { x: 1, y: 1 }));
+    }
+
+    #[test]
+    fn given_position_3_winning_then_return_winning_coordinate() {
+        let game_analyzer = analyzer::new();
+        let game_board = board::new();
+
+        let best_move = game_analyzer.get_best_move(
+            game_board
+                .place_player(Coord { x: 1, y: 1 })
+                .place_player(Coord { x: 2, y: 1 }),
+            CellType::PLAYER_1,
+        );
+
+        assert_eq!(best_move, Some(Coord { x: 0, y: 1 }));
+    }
 }
