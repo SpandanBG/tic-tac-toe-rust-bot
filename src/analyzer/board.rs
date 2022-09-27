@@ -229,5 +229,12 @@ mod board {
             assert_eq!(position_to_coord(&8), Coord { x: 2, y: 2 });
         }
 
+        #[test]
+        fn should_return_the_first_non_empty_cell() {
+            let board = vec![CellType::NON, CellType::PLAYER, CellType::BOT];
+
+            assert_eq!(get_prioritized_cell_type(board), CellType::PLAYER);
+        }
+
     }
 }
