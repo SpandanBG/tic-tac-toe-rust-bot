@@ -11,7 +11,7 @@ pub enum CellType {
 pub enum GameOverType {
     PLAYING = 0,
     PLAYER_1_WIN = 1,
-    BOT_WIN = -1,
+    PLAYER_2_WIN = -1,
     DRAW = 2,
 }
 
@@ -53,7 +53,7 @@ impl Game for Board {
             let victor = match get_victor([self[p0], self[p1], self[p2]]) {
                 CellType::NON => GameOverType::PLAYING,
                 CellType::PLAYER_1 => GameOverType::PLAYER_1_WIN,
-                CellType::PLAYER_2 => GameOverType::BOT_WIN,
+                CellType::PLAYER_2 => GameOverType::PLAYER_2_WIN,
             };
 
             if victor != GameOverType::PLAYING {
@@ -204,7 +204,7 @@ mod board_test {
 
         let victor = game_board.is_game_over();
 
-        assert_eq!(victor, GameOverType::BOT_WIN);
+        assert_eq!(victor, GameOverType::PLAYER_2_WIN);
     }
 
     #[test]
