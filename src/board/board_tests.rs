@@ -19,21 +19,21 @@ mod board_test {
     fn should_place_player_on_given_position() {
         let game_board = new();
 
-        let update_game_board = game_board.place_player(Coord { x: 0, y: 1 });
+        let update_game_board = game_board.set_player(Coord { x: 0, y: 1 }, CellType::PLAYER_1);
         let game_state = update_game_board.get_board_state();
 
         assert_eq!(game_state[3], CellType::PLAYER_1);
     }
 
     #[test]
-    fn should_not_place_bot_if_player_present_on_given_position() {
+    fn should_not_place_player_2_if_player_1_is_present_on_given_position() {
         let mut game_board = new();
 
-        game_board = game_board.place_player(Coord { x: 0, y: 1 });
+        game_board = game_board.set_player(Coord { x: 0, y: 1 }, CellType::PLAYER_1);
 
         assert_eq!(game_board.get_board_state()[3], CellType::PLAYER_1);
 
-        game_board = game_board.place_bot(Coord { x: 0, y: 1 });
+        game_board = game_board.set_player(Coord { x: 0, y: 1 }, CellType::PLAYER_2);
 
         assert_eq!(game_board.get_board_state()[3], CellType::PLAYER_1);
     }
@@ -52,12 +52,12 @@ mod board_test {
     }
 
     #[test]
-    fn should_return_player_win_as_game_over_type() {
+    fn should_return_player_1_wins_as_game_over_type() {
         let mut game_board = new();
 
-        game_board = game_board.place_player(Coord { x: 0, y: 0 });
-        game_board = game_board.place_player(Coord { x: 1, y: 1 });
-        game_board = game_board.place_player(Coord { x: 2, y: 2 });
+        game_board = game_board.set_player(Coord { x: 0, y: 0 }, CellType::PLAYER_1);
+        game_board = game_board.set_player(Coord { x: 1, y: 1 }, CellType::PLAYER_1);
+        game_board = game_board.set_player(Coord { x: 2, y: 2 }, CellType::PLAYER_1);
 
         let victor = game_board.is_game_over();
 
@@ -65,12 +65,12 @@ mod board_test {
     }
 
     #[test]
-    fn should_return_bot_win_as_game_over_type() {
+    fn should_return_player_2_wins_as_game_over_type() {
         let mut game_board = new();
 
-        game_board = game_board.place_bot(Coord { x: 2, y: 0 });
-        game_board = game_board.place_bot(Coord { x: 1, y: 1 });
-        game_board = game_board.place_bot(Coord { x: 0, y: 2 });
+        game_board = game_board.set_player(Coord { x: 2, y: 0 }, CellType::PLAYER_2);
+        game_board = game_board.set_player(Coord { x: 1, y: 1 }, CellType::PLAYER_2);
+        game_board = game_board.set_player(Coord { x: 0, y: 2 }, CellType::PLAYER_2);
 
         let victor = game_board.is_game_over();
 
@@ -81,17 +81,17 @@ mod board_test {
     fn should_return_draw_as_game_over_type() {
         let mut game_board = new();
 
-        game_board = game_board.place_player(Coord { x: 0, y: 0 });
-        game_board = game_board.place_bot(Coord { x: 1, y: 0 });
-        game_board = game_board.place_player(Coord { x: 2, y: 0 });
+        game_board = game_board.set_player(Coord { x: 0, y: 0 }, CellType::PLAYER_1);
+        game_board = game_board.set_player(Coord { x: 1, y: 0 }, CellType::PLAYER_2);
+        game_board = game_board.set_player(Coord { x: 2, y: 0 }, CellType::PLAYER_1);
 
-        game_board = game_board.place_player(Coord { x: 0, y: 1 });
-        game_board = game_board.place_bot(Coord { x: 1, y: 1 });
-        game_board = game_board.place_player(Coord { x: 2, y: 1 });
+        game_board = game_board.set_player(Coord { x: 0, y: 1 }, CellType::PLAYER_1);
+        game_board = game_board.set_player(Coord { x: 1, y: 1 }, CellType::PLAYER_2);
+        game_board = game_board.set_player(Coord { x: 2, y: 1 }, CellType::PLAYER_1);
 
-        game_board = game_board.place_bot(Coord { x: 0, y: 2 });
-        game_board = game_board.place_player(Coord { x: 1, y: 2 });
-        game_board = game_board.place_bot(Coord { x: 2, y: 2 });
+        game_board = game_board.set_player(Coord { x: 0, y: 2 }, CellType::PLAYER_2);
+        game_board = game_board.set_player(Coord { x: 1, y: 2 }, CellType::PLAYER_1);
+        game_board = game_board.set_player(Coord { x: 2, y: 2 }, CellType::PLAYER_2);
 
         let victor = game_board.is_game_over();
 

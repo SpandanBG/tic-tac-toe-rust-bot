@@ -28,8 +28,7 @@ pub struct Coord {
 pub trait Game {
     fn get_board_state(&self) -> Board;
     fn is_game_over(&self) -> GameOverType;
-    fn place_bot(&self, coord: Coord) -> Box<dyn Game>;
-    fn place_player(&self, coord: Coord) -> Box<dyn Game>;
+    fn set_player(&self, coord: Coord, cell_type: CellType) -> Box<dyn Game>;
 }
 
 impl Game for Board {
@@ -69,12 +68,8 @@ impl Game for Board {
         }
     }
 
-    fn place_bot(&self, coord: Coord) -> Box<dyn Game> {
-        return Box::new(update_cell_type(self, coord, CellType::PLAYER_2));
-    }
-
-    fn place_player(&self, coord: Coord) -> Box<dyn Game> {
-        return Box::new(update_cell_type(self, coord, CellType::PLAYER_1));
+    fn set_player(&self, coord: Coord, cell_type: CellType) -> Box<dyn Game> {
+        return Box::new(update_cell_type(self, coord, cell_type));
     }
 }
 
