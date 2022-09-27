@@ -75,7 +75,7 @@ mod analyzer_tests {
             game_board
                 .place_player(Coord { x: 0, y: 0 })
                 .place_player(Coord { x: 1, y: 0 }),
-            CellType::PLAYER,
+            CellType::PLAYER_1,
         );
 
         assert_eq!(best_move, Some(Coord { x: 2, y: 0 }));
@@ -90,7 +90,7 @@ mod analyzer_tests {
             game_board
                 .place_player(Coord { x: 0, y: 0 })
                 .place_player(Coord { x: 2, y: 0 }),
-            CellType::PLAYER,
+            CellType::PLAYER_1,
         );
 
         assert_eq!(best_move, Some(Coord { x: 1, y: 0 }));
@@ -105,7 +105,7 @@ mod analyzer_tests {
             game_board
                 .place_player(Coord { x: 1, y: 0 })
                 .place_player(Coord { x: 2, y: 0 }),
-            CellType::PLAYER,
+            CellType::PLAYER_1,
         );
 
         assert_eq!(best_move, Some(Coord { x: 0, y: 0 }));
@@ -120,7 +120,7 @@ mod analyzer_tests {
             game_board
                 .place_player(Coord { x: 0, y: 1 })
                 .place_player(Coord { x: 1, y: 1 }),
-            CellType::PLAYER,
+            CellType::PLAYER_1,
         );
 
         assert_eq!(best_move, Some(Coord { x: 2, y: 1 }));

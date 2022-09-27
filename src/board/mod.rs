@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, PartialEq, Copy)]
 pub enum CellType {
     NON = 0,
-    PLAYER = 1,
+    PLAYER_1 = 1,
     BOT = -1,
 }
 
@@ -51,7 +51,7 @@ impl Game for Board {
 
             let victor = match get_victor([self[p0], self[p1], self[p2]]) {
                 CellType::NON => GameOverType::PLAYING,
-                CellType::PLAYER => GameOverType::PLAYER_WIN,
+                CellType::PLAYER_1 => GameOverType::PLAYER_WIN,
                 CellType::BOT => GameOverType::BOT_WIN,
             };
 
@@ -71,7 +71,7 @@ impl Game for Board {
     }
 
     fn place_player(&self, coord: Coord) -> Box<dyn Game> {
-        return Box::new(update_cell_type(self, coord, CellType::PLAYER));
+        return Box::new(update_cell_type(self, coord, CellType::PLAYER_1));
     }
 }
 
@@ -126,7 +126,7 @@ mod board_test {
         assert_eq!(
             game_state
                 .iter()
-                .find(|&cell| *cell == CellType::PLAYER || *cell == CellType::BOT),
+                .find(|&cell| *cell == CellType::PLAYER_1 || *cell == CellType::BOT),
             None
         )
     }
@@ -138,7 +138,7 @@ mod board_test {
         let update_game_board = game_board.place_player(Coord { x: 0, y: 1 });
         let game_state = update_game_board.get_board_state();
 
-        assert_eq!(game_state[3], CellType::PLAYER);
+        assert_eq!(game_state[3], CellType::PLAYER_1);
     }
 
     #[test]
@@ -147,11 +147,11 @@ mod board_test {
 
         game_board = game_board.place_player(Coord { x: 0, y: 1 });
 
-        assert_eq!(game_board.get_board_state()[3], CellType::PLAYER);
+        assert_eq!(game_board.get_board_state()[3], CellType::PLAYER_1);
 
         game_board = game_board.place_bot(Coord { x: 0, y: 1 });
 
-        assert_eq!(game_board.get_board_state()[3], CellType::PLAYER);
+        assert_eq!(game_board.get_board_state()[3], CellType::PLAYER_1);
     }
 
     #[test]
