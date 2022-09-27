@@ -19,7 +19,11 @@ impl Analyzer for AnalyzerState {
         for_cell_type: CellType,
     ) -> Option<Coord> {
         let board_state = game_board.get_board_state();
-        let pattern_check_list: Vec<[usize; 3]> = vec![[0, 1, 2], [3, 4, 5]];
+        let pattern_check_list: Vec<[usize; 3]> = vec![
+          [0, 1, 2], 
+          [3, 4, 5],
+          [6, 7, 8]
+        ];
 
         for pattern in pattern_check_list {
             match get_winning_position(&board_state, for_cell_type, pattern) {
