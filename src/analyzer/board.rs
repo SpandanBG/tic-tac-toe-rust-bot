@@ -1,16 +1,18 @@
 mod board {
-    #[derive(Debug, Clone, PartialEq)]
+    #[derive(Debug, Clone, PartialEq, Copy)]
     pub enum CellType {
         NON = 0,
         PLAYER = 1,
         BOT = -1,
     }
 
-    #[derive(PartialEq)]
+    #[allow(non_camel_case_types)]
+    #[derive(Debug, PartialEq)]
     pub enum GameOverType {
         PLAYING = 0,
-        VICTORY = 1,
-        DEFEAT = -1,
+        PLAYER_WIN = 1,
+        BOT_WIN = -1,
+        DRAW = 2,
     }
 
     pub type Board = Vec<CellType>;
@@ -42,26 +44,37 @@ mod board {
         }
 
         fn is_game_over(&self) -> GameOverType {
-            let mut point_stack: Vec<CellType> = Vec::new();
-            let mut game_over_type = GameOverType::PLAYING;
+            let check_list: Vec<Vec<usize>> = vec![
+                vec![0, 1, 2],
+                vec![3, 4, 5],
+                vec![6, 7, 8],
+                vec![0, 3, 6],
+                vec![1, 4, 7],
+                vec![2, 5, 8],
+                vec![0, 4, 8],
+                vec![2, 4, 6],
+            ];
 
-            for position in [0, 1, 2, 3, 6] {
-                let cell_type: &CellType = &self[position];
-                let coord: Coord = position_to_coord(&position);
-                game_over_type = match find_victor(self, coord, cell_type, 1) {
-                    CellType::PLAYER => GameOverType::VICTORY,
-                    CellType::BOT => GameOverType::DEFEAT,
+            for pattern in check_list {
+                let p0 = pattern[0];
+                let p1 = pattern[1];
+                let p2 = pattern[2];
+
+                let victor = match get_victor([self[p0], self[p1], self[p2]]) {
                     CellType::NON => GameOverType::PLAYING,
+                    CellType::PLAYER => GameOverType::PLAYER_WIN,
+                    CellType::BOT => GameOverType::BOT_WIN
                 };
 
-                if game_over_type != GameOverType::PLAYING {
-                    break;
+                if victor != GameOverType::PLAYING {
+                    return victor;
                 }
-
-                point_stack.pop();
             }
 
-            return game_over_type;
+            match self.iter().find(|&cell| *cell == CellType::NON) {
+                None => return GameOverType::DRAW,
+                _ => return GameOverType::PLAYING
+            }
         }
 
         fn place_bot(&self, coord: Coord) -> Box<dyn Game> {
@@ -73,72 +86,27 @@ mod board {
         }
     }
 
+    #[allow(dead_code)]
     pub fn new() -> Box<dyn Game> {
         Box::new(vec![CellType::NON; 9])
     }
 
-    fn find_victor(board: &Board, coord: Coord, cell_type: &CellType, depth: u8) -> CellType {
-        if !coord.is_valid() {
-            return CellType::NON;
+    fn get_victor(cells: [CellType; 3]) -> CellType {
+        let p0_cell_type = cells[0];
+        if p0_cell_type == cells[1] && p0_cell_type == cells[2] {
+            return p0_cell_type;
         }
-        let position: usize = coord_to_position(&coord);
-
-        let position_cell_type: &CellType = &board[position];
-        if *position_cell_type != *cell_type {
-            return CellType::NON;
-        }
-
-        if depth == 3 {
-            return cell_type.clone();
-        }
-
-        let victor: CellType = get_prioritized_cell_type(vec![
-            find_victor(
-                board,
-                Coord {
-                    x: coord.x + 1,
-                    ..coord
-                },
-                cell_type,
-                depth + 1,
-            ),
-            find_victor(
-                board,
-                Coord {
-                    y: coord.y + 1,
-                    ..coord
-                },
-                cell_type,
-                depth + 1,
-            ),
-            find_victor(
-                board,
-                Coord {
-                    x: coord.x + 1,
-                    y: coord.y + 1,
-                },
-                cell_type,
-                depth + 1,
-            ),
-            find_victor(
-                board,
-                Coord {
-                    x: coord.x + 1,
-                    y: coord.y - 1,
-                },
-                cell_type,
-                depth + 1,
-            ),
-        ]);
-
-        return victor;
+        return CellType::NON;
     }
 
-    fn position_to_coord(position: &usize) -> Coord {
-        let x: isize = (*position as isize) % 3;
-        let y: isize = (*position as isize) / 3;
-        return Coord { x, y };
-    }
+    // If future requirement arises to convert position to coordinates,
+    // Here is the formula for it.
+    // ---
+    // fn position_to_coord(position: &usize) -> Coord {
+    //     let x: isize = (*position as isize) % 3;
+    //     let y: isize = (*position as isize) / 3;
+    //     return Coord { x, y };
+    // }
 
     fn coord_to_position(coord: &Coord) -> usize {
         return ((coord.y * 3) + coord.x) as usize;
@@ -155,13 +123,7 @@ mod board {
         return updated_board.to_vec();
     }
 
-    fn get_prioritized_cell_type(cells: Vec<CellType>) -> CellType {
-        return match cells.iter().find(|&cell| *cell != CellType::NON) {
-            Some(cell_type) => cell_type.clone(),
-            _ => CellType::NON,
-        };
-    }
-
+    // ------------------------- TESTS ------------------------- 
 
     #[cfg(test)]
     mod test {
@@ -216,24 +178,64 @@ mod board {
             assert_eq!(coord_to_position(&Coord{ x: 2, y: 2 }), 8);
         }
 
+        // #[test]
+        // fn should_perform_valid_position_to_coord_translation() {
+        //     assert_eq!(position_to_coord(&0), Coord { x: 0, y: 0 });
+        //     assert_eq!(position_to_coord(&1), Coord { x: 1, y: 0 });
+        //     assert_eq!(position_to_coord(&2), Coord { x: 2, y: 0 });
+        //     assert_eq!(position_to_coord(&3), Coord { x: 0, y: 1 });
+        //     assert_eq!(position_to_coord(&4), Coord { x: 1, y: 1 });
+        //     assert_eq!(position_to_coord(&5), Coord { x: 2, y: 1 });
+        //     assert_eq!(position_to_coord(&6), Coord { x: 0, y: 2 });
+        //     assert_eq!(position_to_coord(&7), Coord { x: 1, y: 2 });
+        //     assert_eq!(position_to_coord(&8), Coord { x: 2, y: 2 });
+        // }
+
         #[test]
-        fn should_perform_valid_position_to_coord_translation() {
-            assert_eq!(position_to_coord(&0), Coord { x: 0, y: 0 });
-            assert_eq!(position_to_coord(&1), Coord { x: 1, y: 0 });
-            assert_eq!(position_to_coord(&2), Coord { x: 2, y: 0 });
-            assert_eq!(position_to_coord(&3), Coord { x: 0, y: 1 });
-            assert_eq!(position_to_coord(&4), Coord { x: 1, y: 1 });
-            assert_eq!(position_to_coord(&5), Coord { x: 2, y: 1 });
-            assert_eq!(position_to_coord(&6), Coord { x: 0, y: 2 });
-            assert_eq!(position_to_coord(&7), Coord { x: 1, y: 2 });
-            assert_eq!(position_to_coord(&8), Coord { x: 2, y: 2 });
+        fn should_return_player_win_as_game_over_type() {
+            let mut game_board = new();
+
+            game_board = game_board.place_player(Coord { x: 0, y: 0 });
+            game_board = game_board.place_player(Coord { x: 1, y: 1 });
+            game_board = game_board.place_player(Coord { x: 2, y: 2 });
+
+            let victor = game_board.is_game_over();
+
+            assert_eq!(victor, GameOverType::PLAYER_WIN);
         }
 
         #[test]
-        fn should_return_the_first_non_empty_cell() {
-            let board = vec![CellType::NON, CellType::PLAYER, CellType::BOT];
+        fn should_return_bot_win_as_game_over_type() {
+            let mut game_board = new();
 
-            assert_eq!(get_prioritized_cell_type(board), CellType::PLAYER);
+            game_board = game_board.place_bot(Coord { x: 2, y: 0 });
+            game_board = game_board.place_bot(Coord { x: 1, y: 1 });
+            game_board = game_board.place_bot(Coord { x: 0, y: 2 });
+
+            let victor = game_board.is_game_over();
+
+            assert_eq!(victor, GameOverType::BOT_WIN);
+        }
+
+        #[test]
+        fn should_return_draw_as_game_over_type() {
+            let mut game_board = new();
+
+            game_board = game_board.place_player(Coord { x: 0, y: 0 });
+            game_board = game_board.place_bot(Coord { x: 1, y: 0 });
+            game_board = game_board.place_player(Coord { x: 2, y: 0 });
+
+            game_board = game_board.place_player(Coord { x: 0, y: 1 });
+            game_board = game_board.place_bot(Coord { x: 1, y: 1 });
+            game_board = game_board.place_player(Coord { x: 2, y: 1 });
+            
+            game_board = game_board.place_bot(Coord { x: 0, y: 2 });
+            game_board = game_board.place_player(Coord { x: 1, y: 2 });
+            game_board = game_board.place_bot(Coord { x: 2, y: 2 });
+
+            let victor = game_board.is_game_over();
+
+            assert_eq!(victor, GameOverType::DRAW);
         }
 
     }
