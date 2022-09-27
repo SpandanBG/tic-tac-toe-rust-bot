@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod analyzer_tests {
     use crate::analyzer::{self, Analyzer};
-    use crate::board::{self, Coord, CellType};
+    use crate::board::{self, CellType, Coord};
 
     #[test]
     fn given_position_2_winning_then_return_winning_coordinate() {
