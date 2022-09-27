@@ -23,14 +23,6 @@ mod board {
         pub y: isize,
     }
 
-    impl Coord {
-        fn is_valid(&self) -> bool {
-            let valid_x = !(self.x < 0 || self.x > 2);
-            let valid_y = !(self.y < 0 || self.y > 2);
-            return valid_x && valid_y;
-        }
-    }
-
     pub trait Game {
         fn get_board_state(&self) -> Board;
         fn is_game_over(&self) -> GameOverType;
