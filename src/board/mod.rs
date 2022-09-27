@@ -2,7 +2,7 @@
 pub enum CellType {
     NON = 0,
     PLAYER_1 = 1,
-    BOT = -1,
+    PLAYER_2 = -1,
 }
 
 #[allow(non_camel_case_types)]
@@ -52,7 +52,7 @@ impl Game for Board {
             let victor = match get_victor([self[p0], self[p1], self[p2]]) {
                 CellType::NON => GameOverType::PLAYING,
                 CellType::PLAYER_1 => GameOverType::PLAYER_WIN,
-                CellType::BOT => GameOverType::BOT_WIN,
+                CellType::PLAYER_2 => GameOverType::BOT_WIN,
             };
 
             if victor != GameOverType::PLAYING {
@@ -67,7 +67,7 @@ impl Game for Board {
     }
 
     fn place_bot(&self, coord: Coord) -> Box<dyn Game> {
-        return Box::new(update_cell_type(self, coord, CellType::BOT));
+        return Box::new(update_cell_type(self, coord, CellType::PLAYER_2));
     }
 
     fn place_player(&self, coord: Coord) -> Box<dyn Game> {
@@ -126,7 +126,7 @@ mod board_test {
         assert_eq!(
             game_state
                 .iter()
-                .find(|&cell| *cell == CellType::PLAYER_1 || *cell == CellType::BOT),
+                .find(|&cell| *cell == CellType::PLAYER_1 || *cell == CellType::PLAYER_2),
             None
         )
     }
