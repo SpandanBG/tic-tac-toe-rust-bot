@@ -1,12 +1,13 @@
-mod board;
+use crate::board::{self, Game};
 
-#[derive(Debug)]
-pub enum GameOverType {
-  PLAYING = 0,
-  DEFEAT = -1,
-  VICTORY = 1,
+pub struct Analyzer {
+  board: Box<dyn Game>
 }
 
-pub struct GameState {
-  game_over: GameOverType,
+fn setup() -> Analyzer {
+  let board = board::new(); 
+
+  return Analyzer {
+    board
+  }
 }
