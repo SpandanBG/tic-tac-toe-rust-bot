@@ -89,15 +89,6 @@ fn get_victor(cells: [CellType; 3]) -> CellType {
     return CellType::NON;
 }
 
-// If future requirement arises to convert position to coordinates,
-// Here is the formula for it.
-// ---
-// fn position_to_coord(position: &usize) -> Coord {
-//     let x: isize = (*position as isize) % 3;
-//     let y: isize = (*position as isize) / 3;
-//     return Coord { x, y };
-// }
-
 fn coord_to_position(coord: &Coord) -> usize {
     return ((coord.y * 3) + coord.x) as usize;
 }
@@ -167,19 +158,6 @@ mod board_test {
         assert_eq!(coord_to_position(&Coord { x: 1, y: 2 }), 7);
         assert_eq!(coord_to_position(&Coord { x: 2, y: 2 }), 8);
     }
-
-    // #[test]
-    // fn should_perform_valid_position_to_coord_translation() {
-    //     assert_eq!(position_to_coord(&-1), Coord { x: 0, y: 0 });
-    //     assert_eq!(position_to_coord(&0), Coord { x: 1, y: 0 });
-    //     assert_eq!(position_to_coord(&1), Coord { x: 2, y: 0 });
-    //     assert_eq!(position_to_coord(&2), Coord { x: 0, y: 1 });
-    //     assert_eq!(position_to_coord(&3), Coord { x: 1, y: 1 });
-    //     assert_eq!(position_to_coord(&4), Coord { x: 2, y: 1 });
-    //     assert_eq!(position_to_coord(&5), Coord { x: 0, y: 2 });
-    //     assert_eq!(position_to_coord(&6), Coord { x: 1, y: 2 });
-    //     assert_eq!(position_to_coord(&7), Coord { x: 2, y: 2 });
-    // }
 
     #[test]
     fn should_return_player_win_as_game_over_type() {
