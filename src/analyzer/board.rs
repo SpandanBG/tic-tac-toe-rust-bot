@@ -44,7 +44,7 @@ mod board {
         }
 
         fn is_game_over(&self) -> GameOverType {
-            let check_list: Vec<Vec<usize>> = vec![
+            let pattern_check_list: Vec<Vec<usize>> = vec![
                 vec![0, 1, 2],
                 vec![3, 4, 5],
                 vec![6, 7, 8],
@@ -55,15 +55,13 @@ mod board {
                 vec![2, 4, 6],
             ];
 
-            for pattern in check_list {
-                let p0 = pattern[0];
-                let p1 = pattern[1];
-                let p2 = pattern[2];
+            for pattern in pattern_check_list {
+                let (p0, p1, p2) = (pattern[0], pattern[1], pattern[2]);
 
                 let victor = match get_victor([self[p0], self[p1], self[p2]]) {
                     CellType::NON => GameOverType::PLAYING,
                     CellType::PLAYER => GameOverType::PLAYER_WIN,
-                    CellType::BOT => GameOverType::BOT_WIN
+                    CellType::BOT => GameOverType::BOT_WIN,
                 };
 
                 if victor != GameOverType::PLAYING {
@@ -73,7 +71,7 @@ mod board {
 
             match self.iter().find(|&cell| *cell == CellType::NON) {
                 None => return GameOverType::DRAW,
-                _ => return GameOverType::PLAYING
+                _ => return GameOverType::PLAYING,
             }
         }
 
@@ -123,7 +121,7 @@ mod board {
         return updated_board.to_vec();
     }
 
-    // ------------------------- TESTS ------------------------- 
+    // ------------------------- TESTS -------------------------
 
     #[cfg(test)]
     mod test {
@@ -167,15 +165,15 @@ mod board {
 
         #[test]
         fn should_perform_valid_coord_to_position_translation() {
-            assert_eq!(coord_to_position(&Coord{ x: 0, y: 0 }), 0);
-            assert_eq!(coord_to_position(&Coord{ x: 1, y: 0 }), 1);
-            assert_eq!(coord_to_position(&Coord{ x: 2, y: 0 }), 2);
-            assert_eq!(coord_to_position(&Coord{ x: 0, y: 1 }), 3);
-            assert_eq!(coord_to_position(&Coord{ x: 1, y: 1 }), 4);
-            assert_eq!(coord_to_position(&Coord{ x: 2, y: 1 }), 5);
-            assert_eq!(coord_to_position(&Coord{ x: 0, y: 2 }), 6);
-            assert_eq!(coord_to_position(&Coord{ x: 1, y: 2 }), 7);
-            assert_eq!(coord_to_position(&Coord{ x: 2, y: 2 }), 8);
+            assert_eq!(coord_to_position(&Coord { x: 0, y: 0 }), 0);
+            assert_eq!(coord_to_position(&Coord { x: 1, y: 0 }), 1);
+            assert_eq!(coord_to_position(&Coord { x: 2, y: 0 }), 2);
+            assert_eq!(coord_to_position(&Coord { x: 0, y: 1 }), 3);
+            assert_eq!(coord_to_position(&Coord { x: 1, y: 1 }), 4);
+            assert_eq!(coord_to_position(&Coord { x: 2, y: 1 }), 5);
+            assert_eq!(coord_to_position(&Coord { x: 0, y: 2 }), 6);
+            assert_eq!(coord_to_position(&Coord { x: 1, y: 2 }), 7);
+            assert_eq!(coord_to_position(&Coord { x: 2, y: 2 }), 8);
         }
 
         // #[test]
@@ -228,7 +226,7 @@ mod board {
             game_board = game_board.place_player(Coord { x: 0, y: 1 });
             game_board = game_board.place_bot(Coord { x: 1, y: 1 });
             game_board = game_board.place_player(Coord { x: 2, y: 1 });
-            
+
             game_board = game_board.place_bot(Coord { x: 0, y: 2 });
             game_board = game_board.place_player(Coord { x: 1, y: 2 });
             game_board = game_board.place_bot(Coord { x: 2, y: 2 });
@@ -237,6 +235,5 @@ mod board {
 
             assert_eq!(victor, GameOverType::DRAW);
         }
-
     }
 }
