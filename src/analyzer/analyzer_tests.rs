@@ -11,7 +11,7 @@ mod analyzer_tests {
     }
 
     macro_rules! two_position_played_table_tests {
-        ( $( $name:ident: $value:expr ),* ) => {
+        ( $( $name:ident: $value:expr, )* ) => {
         $(
             #[test]
             fn $name() {
@@ -94,6 +94,6 @@ mod analyzer_tests {
             position_2: Coord { x: 2, y: 2},
             player_cell_type: CellType::PLAYER_1,
             expected_position_to_play: Coord { x: 0, y: 2 }
-        }
+        },
     }
 }
