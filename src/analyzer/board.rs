@@ -1,5 +1,4 @@
 mod board {
-
     #[derive(Debug, Clone, PartialEq)]
     pub enum CellType {
         NON = 0,
@@ -31,8 +30,8 @@ mod board {
     pub trait Game {
         fn get_board_state(&self) -> Board;
         fn is_game_over(&self) -> GameOverType;
-        fn place_bot(&self, coord: Coord) -> Board;
-        fn place_player(&self, coord: Coord) -> Board;
+        fn place_bot(&self, coord: Coord) -> Box<dyn Game>;
+        fn place_player(&self, coord: Coord) -> Box<dyn Game>;
     }
 
     impl Game for Board {
@@ -63,12 +62,12 @@ mod board {
             return game_over_type;
         }
 
-        fn place_bot(&self, coord: Coord) -> Board {
-            return update_cell_type(self, coord, CellType::BOT);
+        fn place_bot(&self, coord: Coord) -> Box<dyn Game>{
+            return Box::new(update_cell_type(self, coord, CellType::BOT));
         }
 
-        fn place_player(&self, coord: Coord) -> Board {
-            return update_cell_type(self, coord, CellType::PLAYER);
+        fn place_player(&self, coord: Coord) -> Box<dyn Game> {
+            return Box::new(update_cell_type(self, coord, CellType::PLAYER));
         }
     }
 
@@ -180,8 +179,8 @@ mod test {
     fn should_place_player_on_given_position() {
         let game_board = board::new();
 
-        game_board.place_player(Coord { x: 1, y: 1 });
-        let game_state = game_board.get_board_state();
+        let update_game_board = game_board.place_player(Coord { x: 1, y: 1 });
+        let game_state = update_game_board.get_board_state();
 
         assert_eq!(game_state[4], CellType::PLAYER);
     }
