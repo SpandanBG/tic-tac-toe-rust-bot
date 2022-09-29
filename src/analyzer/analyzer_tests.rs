@@ -158,5 +158,47 @@ mod analyzer_tests {
             player_cell_type: CellType::PLAYER_1,
             expected_position_to_play: Coord { x: 2, y: 2 }
         },
+
+        given_right_diagonally_0_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 1, y: 1 },
+            position_2: Coord { x: 2, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 0, y: 0 }
+        },
+
+        given_right_diagonally_4_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 0, y: 0 },
+            position_2: Coord { x: 2, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 1, y: 1 }
+        },
+
+        given_right_diagonally_8_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 0, y: 0 },
+            position_2: Coord { x: 1, y: 1 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 2, y: 2 }
+        },
+
+        given_left_diagonally_2_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 1, y: 1 },
+            position_2: Coord { x: 0, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 2, y: 0 }
+        },
+
+        given_left_diagonally_4_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 2, y: 0 },
+            position_2: Coord { x: 0, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 1, y: 1 }
+        },
+
+        given_left_diagonally_6_winning_then_return_winning_coordinate: TwoPositionTest {
+            position_1: Coord { x: 2, y: 0 },
+            position_2: Coord { x: 1, y: 1 },
+            player_cell_type: CellType::PLAYER_1,
+            expected_position_to_play: Coord { x: 0, y: 2 }
+        },
     }
 }
