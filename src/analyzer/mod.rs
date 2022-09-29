@@ -33,8 +33,13 @@ impl Analyzer for AnalyzerState {
         for pattern in pattern_check_list {
             match get_winning_position(&board_state, for_cell_type, pattern) {
                 Some(position) => return Some(position_to_coord(&position)),
-                _ => continue,
+                _ => (),
             };
+
+            match get_defending_position(&board_state, for_cell_type, pattern) {
+                Some(position) => return Some(position_to_coord(&position)),
+                _ => (),
+            }
         }
 
         return None;
@@ -60,6 +65,7 @@ fn get_winning_position(
 
         if board[position] == CellType::NON {
             selected_position = Some(position);
+            continue;
         }
 
         if board[position] == for_cell_type {
@@ -73,6 +79,34 @@ fn get_winning_position(
     return selected_position;
 }
 
+fn get_defending_position(
+    board: &Vec<CellType>,
+    for_cell_type: CellType,
+    positions: [usize; 3],
+) -> Option<usize> {
+    let mut selected_position = None;
+    let mut cell_type_match_count: u8 = 0;
+
+    for position in positions {
+        if board[position] == for_cell_type {
+            return None;
+        }
+
+        if board[position] == CellType::NON {
+            selected_position = Some(position);
+            continue;
+        }
+
+        if board[position] != for_cell_type {
+            cell_type_match_count += 1;
+        }
+    }
+
+    if cell_type_match_count != 2 {
+        return None;
+    }
+    return selected_position;
+}
 fn position_to_coord(position: &usize) -> board::Coord {
     let x: isize = (*position as isize) % 3;
     let y: isize = (*position as isize) / 3;
