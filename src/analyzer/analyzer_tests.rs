@@ -233,12 +233,76 @@ mod analyzer_tests {
     }
 
     two_position_played_defending_table_tests! {
-        given_position_2_defends_then_return_coordinates: TwoPositionDefendingTest {
+        given_position_0_defends_then_return_coordinates: TwoPositionDefendingTest {
             position_1: Coord { x: 1, y: 0 },
             position_2: Coord { x: 2, y: 0 },
             player_cell_type: CellType::PLAYER_1,
             opponent_cell_type: CellType::PLAYER_2,
             expected_position_to_play: Coord { x: 0, y: 0 }
+        },
+
+        given_position_1_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 0 },
+            position_2: Coord { x: 2, y: 0 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 1, y: 0 }
+        },
+
+        given_position_2_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 0 },
+            position_2: Coord { x: 1, y: 0 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 2, y: 0 }
+        },
+
+        given_position_3_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 1, y: 1 },
+            position_2: Coord { x: 2, y: 1 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 0, y: 1 }
+        },
+
+        given_position_4_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 1 },
+            position_2: Coord { x: 2, y: 1 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 1, y: 1 }
+        },
+
+        given_position_5_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 1 },
+            position_2: Coord { x: 1, y: 1 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 2, y: 1 }
+        },
+
+        given_position_6_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 1, y: 2 },
+            position_2: Coord { x: 2, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 0, y: 2 }
+        },
+
+        given_position_7_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 2 },
+            position_2: Coord { x: 2, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 1, y: 2 }
+        },
+
+        given_position_8_defends_then_return_coordinates: TwoPositionDefendingTest {
+            position_1: Coord { x: 0, y: 2 },
+            position_2: Coord { x: 1, y: 2 },
+            player_cell_type: CellType::PLAYER_1,
+            opponent_cell_type: CellType::PLAYER_2,
+            expected_position_to_play: Coord { x: 2, y: 2 }
         },
     }
 }
